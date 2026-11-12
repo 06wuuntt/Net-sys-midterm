@@ -27,12 +27,10 @@ Log 等級：執行時 `LOG_LEVEL=0 ./build/server 9000`（0 DEBUG、1 INFO、2 
 | `--no-robust` | 關閉全部保護機制，供對照實驗使用 | 未啟用 |
 
 ## 保護機制與對照實驗
-`experiments.sh` 會對機制 1 到 3 各跑一次「關閉保護／啟用保護」的對照。機制 4、5 server 也有實作，但腳本沒有對應的實驗。
+`experiments.sh` 會對下列三個機制各跑一次「關閉保護／啟用保護」的對照。
 
 | # | 異常狀況 | 機制 |
 |---|---|---|
 | 1 | 子行程結束沒被回收（zombie） | `SIGCHLD` handler + `waitpid` |
 | 2 | Client 中途斷線 | 忽略 `SIGPIPE`，檢查 `send` 回傳值 |
 | 3 | Server 快速重啟 | `SO_REUSEADDR` |
-| 4 | Client 連線後不送資料 | `SO_RCVTIMEO` 閒置逾時 |
-| 5 | 連線數過多 | 父行程計數，超過上限就拒絕 |
